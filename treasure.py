@@ -3,6 +3,7 @@ import requests
 from lxml import html
 import shlex
 import math
+import time
 
 class Film:
     def __init__(self,title,slug,likers=[]):
@@ -17,23 +18,35 @@ class Film:
         return (self.slug == other.slug)
 
     def getLikers(self): #TODO: write some general parser that gets passed page and what youre looking for so we dont have to keep copy pasting this (or read bs4 docs? hmm)
-        page = requests.get("https://letterboxd.com/film/"+self.slug+"/likes")
+        
+        page = requests.get("https://letterboxd.com/film/"+self.slug+"/likes/page/1/")
         soup = bs(page.content, 'lxml')
 
-        mydivs = soup.findAll(name="a", attrs={"class":"name"})
+        num_of_likes = int(''.join((soup.find(name="a", attrs={"class":"tooltip", "href":"/film/"+self.slug+"/likes/"}).get("title")).split(u'\xa0')[0].split(","))) # Get amount of liked films for user as an int
+        num_of_pages = math.ceil(num_of_likes/25)
+        
+        print(num_of_likes)
+        print(num_of_pages)
 
-        #print(mydivs) TODO: get all likers for movie without using shlex
+        for i in range(1, num_of_pages+1):
+            page = requests.get("https://letterboxd.com/film/"+self.slug+"/likes/page/"+str(i)+"/")
+            soup = bs(page.content, 'lxml')
+            mydivs = soup.find_all(name="a", attrs={"class":"name"})
 
-        # for div in mydivs: 
-            
-        #     self.likers.append(Profile(div.))
-        #     name = temp[4].split("/")[1]
-        #     self.likers.append(name)  
+            for div in mydivs:    
+                self.likers.append(User(div.get("href").split("/")[1]))
+
 
 class User:
     def __init__(self,user_id,liked_films=[]):  #this would all feel much nicer with just structs..
-        self.user_id = user_id
-        self.liked_films = []
+        self.user_id = user_id # user slug
+        self.liked_films = [] #Array of films
+
+    def __repr__(self):
+        return self.user_id
+
+    def __eq__(self, other):
+        return self.user_id==other.user_id
 
     def getLikedFilms(self):
         page = requests.get("https://letterboxd.com/"+self.user_id+"/likes/films/page/1/")
@@ -65,12 +78,15 @@ class User:
                     break
         return temp 
 
+start = time.time()
 
-ahmed = User("hahahahmed")
 phil = User("philg2000")
-ahmed.getLikedFilms()
+#ahmed = User("hahahahmed")
+#ahmed.getLikedFilms()
 phil.getLikedFilms()
+phil.liked_films[0].getLikers()
+#print(ahmed.getMutualLikes(phil))
 
-print(ahmed.getMutualLikes(phil))
-
-    
+end = time.time()
+total = end-start
+print(total)   
