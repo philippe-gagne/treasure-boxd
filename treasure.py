@@ -36,7 +36,6 @@ class Film:
             for div in mydivs:    
                 self.likers.append(User(div.get("href").split("/")[1]))
 
-
 class User:
     def __init__(self,user_id,liked_films=[]):  #this would all feel much nicer with just structs..
         self.user_id = user_id # user slug
