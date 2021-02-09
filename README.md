@@ -1,6 +1,7 @@
 # treasure-boxd
 A film recommender that derives recommendations based on users' Letterboxd Likes.
 
+Clone into a virtual environment and install all packages with pip install -r requirements.txt
 
 da handbook: 
 https://arxiv.org/pdf/1707.07435.pdf
