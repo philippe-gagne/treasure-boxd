@@ -1,17 +1,21 @@
 import scrapy
 import time
 
-class User_LikedFilms_Spider(scrapy.Spider):
+class User_LikedFilmsSpider(scrapy.Spider):
+
     name = 'user_likedfilms'
      
-    __init__(self, user_slug):
+    def __init__(self, **kw):
+        
+        super(User_LikedFilmsSpider, self).__init__(**kw)
+
         try:
-            self.start_urls = ['https://letterboxd.com/'+user_slug+'/likes/films/page/1/']
+            slug = kw.get("slug") or kw.get("user_slug")
         except:
-            print("ERROR: No user slug provided")
-            
-        super().__init__(**kwargs)
-    
+            print("No user slug provided")
+
+        self.start_urls = ['https://letterboxd.com/'+slug+'/likes/films/page/1/']
+
     film_slugs = []
     film_titles = []
     film_data = {}
@@ -35,4 +39,4 @@ class User_LikedFilms_Spider(scrapy.Spider):
             
             # yield {
             #     'title' : poster.css('data-film-name').get()
-            # }
+            # 

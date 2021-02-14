@@ -6,7 +6,7 @@
 import scrapy
 
 
-class TreasureboxdItem(scrapy.Item):
+class TboxdScrapyUtilsItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass

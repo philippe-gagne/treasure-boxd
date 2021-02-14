@@ -1,4 +1,4 @@
-# Scrapy settings for treasureboxd project
+# Scrapy settings for tboxd_scrapy_utils project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'treasureboxd'
+BOT_NAME = 'tboxd_scrapy_utils'
 
-SPIDER_MODULES = ['treasureboxd.spiders']
-NEWSPIDER_MODULE = 'treasureboxd.spiders'
+SPIDER_MODULES = ['tboxd_scrapy_utils.spiders']
+NEWSPIDER_MODULE = 'tboxd_scrapy_utils.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'treasureboxd (+http://www.yourdomain.com)'
+#USER_AGENT = 'tboxd_scrapy_utils (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'treasureboxd.middlewares.TreasureboxdSpiderMiddleware': 543,
+#    'tboxd_scrapy_utils.middlewares.TboxdScrapyUtilsSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'treasureboxd.middlewares.TreasureboxdDownloaderMiddleware': 543,
+#    'tboxd_scrapy_utils.middlewares.TboxdScrapyUtilsDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'treasureboxd.pipelines.TreasureboxdPipeline': 300,
+#    'tboxd_scrapy_utils.pipelines.TboxdScrapyUtilsPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
