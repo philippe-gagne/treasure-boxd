@@ -1,5 +1,5 @@
 # treasure-boxd
-A film recommender that derives recommendations based on users' Letterboxd Likes.
+Treasure-boxd is a tool that predicts movie preferences and provides film recommendations based on users' Letterboxd data.
 
 **Installation Instructions**
 1) Create a virtual environment before cloning this repository. I named mine `tboxd_venv`, but do as you wish. Documentation: https://docs.python.org/3/library/venv.html
