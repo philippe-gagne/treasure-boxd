@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+.App {
+  font-family: IBM Plex Mono;
+  font-style: normal;
+  background: linear-gradient(117.07deg, #205184 21.86%, #DA4711 88.11%);
+}
+
+.landing-body {
+  /* background: linear-gradient(117.07deg, #205184 21.86%, #DA4711 88.11%); */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin); 
+  color: white;
+}
+
+.splash-text{
+  font-weight: bold;
+  position:fixed;
+  align-items: left;
+  font-size: 55px;
+  line-height: 120%;
+
+  /* left: calc(50% - 691px/2 + 0.5px); */
+  left: 25vmax;
+  top: 12vmin;
+}
+
+a{
+  text-decoration: none;
+  &:visited{
+    color:inherit;
+    
+  }
+}
+
+.body-text {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  font-weight: 600;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 120%;
+
+  width: 100%;
+  height:auto;
+
+  .description {
+    position: absolute;
+    right:57%;
+    width: 30% !important;
+
+    display: flex;
+    align-items: center;
+    text-align: right;
+    text-transform: lowercase;
+    }
+  
+  .call-to-action {
+    position: absolute;
+    // height: 152px;
+    // right: calc(50% - 440px/2 - 313px);
+    left: 57%;
+    // top: 519px;
+    width: 30% !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    text-transform: lowercase;
+
+    p{
+      margin-bottom: 0;
+    }
+  }
+
+  .form-group{
+    display: flex;
+    flex-direction: row;
+    align-items:flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    padding-top: 4px;
+    width: 100%;
+
+    .user-input{
+      background-color: transparent;
+      border-top: transparent;
+      border-left: transparent;
+      border-right: transparent;
+      border-bottom: 2px #fff solid ;
+      border-radius: 1px;
+      font-family: inherit;
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      width: 240px;
+      
+      &::placeholder{
+        color: #FFFFFF;
+        opacity: 0.7;
+      }
+
+      &:focus{
+        outline: none;
+        // border: 2px solid #FFF ;
+      }
+    }
+
+    .go-btn {
+      border: 2px solid #FFFFFF;
+      box-sizing: border-box;
+      border-radius: 4px;
+      background: none;
+      font-family: inherit;
+      font-weight: bolder;
+      font-size: 30px;
+      line-height: 20px;
+      color: inherit;
+      padding: 0px 12px 4px;
+      margin-left: 12px;
+      vertical-align: center;
+
+      // z-index: -1;
+      
+      transition:         0.08s ease-in;
+      -o-transition:      0.08s ease-in;
+      -ms-transition:     0.08s ease-in;
+      -moz-transition:    0.08s ease-in;
+      -webkit-transition: 0.08s ease-in;    
+
+      &:hover{
+        cursor: pointer;
+  
+        .button-text{
+          color: #DA4711;
+        }
+      }
+  
+      &:before {
+        content: "";
+        position: absolute;
+        background: #FFFFFF;
+        bottom: 0;
+        left: 0;
+        right: 100%;
+        top: 0;
+        z-index: -1;
+        transition: right 0.18s ease-in;
+      }
+  
+      &:hover:before{
+        right: 0;
+      }
+
+    }
+  }
+}

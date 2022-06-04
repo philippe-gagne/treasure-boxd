@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+.header {
+  position: absolute;
+  height:auto;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.brand-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  // padding-top: 30px!important;
+  position: absolute;
+  left: 2em;
+
+  .logo{
+    height: 50px;
+    width: 50px;
+  }
+
+  .title{
+    font-size: 24px;
+    padding-left: 6px;
+  }
+}
+
+.quicklinks{
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  padding: 0px;
+  height: fit-content;
+  position: absolute;
+  right: 3em;
+  
+  font-weight: 600;
+  font-size: 16px;
+
+  .header-link{
+    display: flex;
+    text-transform: lowercase;
+    flex: none;
+    flex-grow: 0;
+    margin-left: 40px;
+  }
+
+  a{
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+
+  .header-button{
+    position: relative;
+    // display: block;
+
+    border: 2px solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 4px;
+    background: none;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    color: inherit;
+    margin-left: 40px;
+    overflow: hidden;
+    z-index: 1;
+
+    transition:         0.08s ease-in;
+    -o-transition:      0.08s ease-in;
+    -ms-transition:     0.08s ease-in;
+    -moz-transition:    0.08s ease-in;
+    -webkit-transition: 0.08s ease-in;    
+
+    // https://codepen.io/prasanthmj/pen/MmeEyB
+    &:hover{
+      cursor: pointer;
+
+      .button-text{
+        color: #DA4711;
+      }
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      background: #FFFFFF;
+      bottom: 0;
+      left: 0;
+      right: 100%;
+      top: 0;
+      z-index: -1;
+      transition: right 0.18s ease-in;
+    }
+
+    &:hover:before{
+      right: 0;
+    }
+
+  }
+}
