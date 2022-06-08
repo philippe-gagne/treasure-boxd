@@ -20,7 +20,6 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
         :type user_slug: string
         :param kw: keyword arguments to initialize Spider
         '''
-
         self.user_slug = user_slug
         self.start_urls = ['https://letterboxd.com/'+self.user_slug+'/likes/films/page/1/']
 
@@ -48,10 +47,11 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
             film_slugs[i] = film_slugs[i].split("/")[-2]
 
         with open("liked_films.csv", "a", newline="") as outfile:
-            fieldnames = ["film"]
+            fieldnames = ["user","film"]
             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
             for film in film_slugs:
-                writer.writerow({'film' : film})
+                writer.writerow({'user' : self.user_slug,'film' : film})
+
 
         # if response.css('a.previous').get() == None and page_num > 1 :
         #     for x in range(2, (page_num+1)):
