@@ -7,6 +7,7 @@ from tboxd_scrapy_proj.spiders import user_likedfilms, film_getuserlikes
 import logging
 import csv
 import time
+from twisted.internet import reactor, defer
 logging.getLogger('scrapy').propagate = False
 
 start_time = time.time()
@@ -14,7 +15,7 @@ print(start_time)
 
 
 
-process = CrawlerProcess()
+'''process = CrawlerProcess()
 
 
 with open("users.csv") as myfile:
@@ -24,7 +25,32 @@ with open("users.csv") as myfile:
         print(swag)
         process.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug=swag)
 
-process.start()
+process.start()'''
+
+
+
+runner = CrawlerRunner()
+
+@defer.inlineCallbacks
+def crawl():
+    yield runner.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug="philg2000")
+
+    with open("liked_films.csv") as myfile:
+        firstNlines=myfile.readlines()[3:6] #temporarily hardcoded, can't call too many
+        for line in firstNlines:
+            slug = line.strip().split(",")
+            yield runner.crawl(film_getuserlikes.FilmGetUserLikesSpider, film_slug=slug[1], main_user="philg2000")
+
+    with open("users.csv") as myfile:
+        firstNlines=myfile.readlines()[3:6] #temporarily hardcoded, can't call too many
+        for line in firstNlines:
+            slug = line.strip()
+            yield runner.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug=slug)
+
+    reactor.stop()
+
+crawl()
+reactor.run()
 
 #get liked first 6400 liked users for each liked film [done]
 

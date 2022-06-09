@@ -40,7 +40,6 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
             else:
                 page_num = (like_num // 72)+1
             
-            print(page_num)
 
         film_slugs = response.css('div.poster.film-poster.really-lazy-load::attr(data-film-slug)').getall()
         for i in range(len(film_slugs)):

@@ -27,7 +27,6 @@ class FilmGetUserLikesSpider(scrapy.Spider):
 
     def parse(self, response):
 
-
         user_slugs = response.css('a.name::attr(href)').getall()
 
         like_num = response.css('li.js-route-likes').xpath('a/@title').get()
@@ -39,6 +38,8 @@ class FilmGetUserLikesSpider(scrapy.Spider):
         if self.main_user in user_slugs: user_slugs.remove(self.main_user)
         self.all_users = self.all_users + user_slugs
 
+
+
         # if(like_num / 25 >= 256):
         #     page_num = 256
         # else:
@@ -47,7 +48,8 @@ class FilmGetUserLikesSpider(scrapy.Spider):
         if response.css('a.previous').get() == None :
             for x in range(2, 257):
                 yield scrapy.Request(url='https://letterboxd.com/film/'+self.film_slug+'/likes/page/'+str(x)+'/')
-    
+
+
     def close(self, reason):
         with open('users.csv', 'a', newline='') as outfile:
             fieldnames=['username']
