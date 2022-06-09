@@ -2,6 +2,7 @@ import scrapy
 import csv
 import time
 import logging
+from tboxd_scrapy_proj.items import UserLikesItem
 
 logging.getLogger('scrapy').propagate = True
 
@@ -10,7 +11,13 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
 
     name = 'user_likedfilms'
     allowed_domains = ['letterboxd.com']
-    start_urls = ['https://letterboxd.com/philg2000/likes/films/page/1/']  
+    start_urls = ['https://letterboxd.com/philg2000/likes/films/page/1/'] 
+
+    custom_settings = {
+        'ITEM_PIPELINES':{
+            'tboxd_scrapy_proj.pipelines.UserLikesPipeline': 300
+        }
+    }
 
     def __init__(self, user_slug="philg2000", **kwargs):
         '''
@@ -40,18 +47,14 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
                 page_num = like_num // 72
             else:
                 page_num = (like_num // 72)+1
-            
-            print(page_num)
-
+                    
         film_slugs = response.css('div.poster.film-poster.really-lazy-load::attr(data-film-slug)').getall()
+        
+        item = UserLikesItem()
+        print(film_slugs)
         for i in range(len(film_slugs)):
-            film_slugs[i] = film_slugs[i].split("/")[-2]
-
-        with open("liked_films.csv", "a", newline="") as outfile:
-            fieldnames = ["film"]
-            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-            for film in film_slugs:
-                writer.writerow({'film' : film})
+            item['film'] = film_slugs[i]
+            yield item
 
         # if response.css('a.previous').get() == None and page_num > 1 :
         #     for x in range(2, (page_num+1)):

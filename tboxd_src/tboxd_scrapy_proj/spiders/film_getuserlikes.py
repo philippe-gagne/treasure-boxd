@@ -1,6 +1,7 @@
 import scrapy
 import logging
 import csv
+from tboxd_scrapy_proj.items import MutualLikersItem
 
 class FilmGetUserLikesSpider(scrapy.Spider):
     name = 'film_getuserlikes'
@@ -8,7 +9,13 @@ class FilmGetUserLikesSpider(scrapy.Spider):
     start_urls = ['https://letterboxd.com/film/enemy/likes/page/1/']
     user_num = None
     all_users = []
-    logging.getLogger('scrapy').propagate = True
+    logging.getLogger('scrapy').propagate = False
+
+    custom_settings = {
+        'ITEM_PIPELINES':{
+            'tboxd_scrapy_proj.pipelines.MutualLikersPipeline': 300
+        }
+    }
 
     def __init__(self, film_slug='enemy', main_user='philg2000', **kwargs):
         '''
@@ -27,17 +34,22 @@ class FilmGetUserLikesSpider(scrapy.Spider):
 
     def parse(self, response):
 
-
         user_slugs = response.css('a.name::attr(href)').getall()
 
         like_num = response.css('li.js-route-likes').xpath('a/@title').get()
         like_num = int(like_num.split('\xa0')[0].replace(',',''))
 
-        for x in range(0, len(user_slugs)):
-            user_slugs[x] = user_slugs[x][1:-1]
+        # for x in range(0, len(user_slugs)):
+        #     user_slugs[x] = user_slugs[x][1:-1]
 
-        if self.main_user in user_slugs: user_slugs.remove(self.main_user)
-        self.all_users = self.all_users + user_slugs
+        # if self.main_user in user_slugs: user_slugs.remove(self.main_user)
+        # # self.all_users = self.all_users + user_slugs
+
+        item = MutualLikersItem()
+        for user in user_slugs:
+            item['film'] = self.film_slug
+            item['username'] = user
+            yield item
 
         # if(like_num / 25 >= 256):
         #     page_num = 256
@@ -48,10 +60,10 @@ class FilmGetUserLikesSpider(scrapy.Spider):
             for x in range(2, 257):
                 yield scrapy.Request(url='https://letterboxd.com/film/'+self.film_slug+'/likes/page/'+str(x)+'/')
     
-    def close(self, reason):
-        with open('users.csv', 'a', newline='') as outfile:
-            fieldnames=['username']
-            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-            for user in self.all_users:
-                writer.writerow({'username':user})
+    # def close(self, reason):
+    #     with open('users.csv', 'a', newline='') as outfile:
+    #         fieldnames=['username']
+    #         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+    #         for user in self.all_users:
+    #             writer.writerow({'username':user})
 

@@ -6,7 +6,11 @@
 import scrapy
 
 
-class TboxdScrapyUtilsItem(scrapy.Item):
+class UserLikesItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    film = scrapy.Field()
+
+class MutualLikersItem(scrapy.Item):
+    film = scrapy.Field()
+    username = scrapy.Field()

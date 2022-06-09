@@ -6,8 +6,38 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from tboxd_scrapy_proj.items import UserLikesItem
+from scrapy.exporters import CsvItemExporter
+import csv
 
+class UserLikesPipeline:
 
-class TboxdScrapyUtilsPipeline:
+    def open_spider(self, spider):
+        self.file = open('user_likes.csv', 'wb')
+        self.exporter = CsvItemExporter(self.file)
+        self.exporter.start_exporting()
+
+    def close_spider(self, spider):
+        self.exporter.finish_exporting()
+        self.file.close()
+    
     def process_item(self, item, spider):
+        item['film'] = item['film'].split("/")[-2]
+        self.exporter.export_item(item)
+        return item
+
+class MutualLikersPipeline:
+
+    def open_spider(self, spider):
+        self.file = open('mutual_likers.csv', 'wb')
+        self.exporter = CsvItemExporter(self.file)
+        self.exporter.start_exporting()
+
+    def close_spider(self, spider):
+        self.exporter.finish_exporting()
+        self.file.close()
+
+    def process_item(self, item, spider):
+        item['username'] = item['username'][1:-1]
+        self.exporter.export_item(item)
         return item
