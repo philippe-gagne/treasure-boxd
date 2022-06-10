@@ -55,6 +55,12 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
             item['username'] = self.user_slug
             item['film'] = film_slugs[i]
             yield item
+            
+#         with open("liked_films.csv", "a", newline="") as outfile:
+#             fieldnames = ["user","film"]
+#             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+#             for film in film_slugs:
+#                 writer.writerow({'user' : self.user_slug,'film' : film})
 
         # if response.css('a.previous').get() == None and page_num > 1 :
         #     for x in range(2, (page_num+1)):

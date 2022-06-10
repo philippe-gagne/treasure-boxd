@@ -25,7 +25,6 @@ with open("users.csv") as myfile:
 
 process.start()'''
 
-
 runner = CrawlerRunner()
 
 @defer.inlineCallbacks
