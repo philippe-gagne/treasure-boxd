@@ -45,9 +45,14 @@ def crawl():
 
     reactor.stop()
 
-foo = open('users.csv', "w+")
+foo = open('users.csv', "w+", newline='')
+writer = csv.writer(foo)
+writer.writerow(['username'])
 foo.close()
-bar = open('liked_films.csv', 'w+')
+
+bar = open('liked_films.csv', 'w+', newline='')
+writer = csv.writer(bar)
+writer.writerow(['username','film'])
 bar.close()
 
 crawl()
