@@ -13,8 +13,9 @@ import csv
 class UserLikesPipeline:
 
     def open_spider(self, spider):
-        self.file = open('user_likes.csv', 'wb')
+        self.file = open('liked_films.csv', 'ab')
         self.exporter = CsvItemExporter(self.file)
+        self.exporter.fields_to_export = ['username', 'film']
         self.exporter.start_exporting()
 
     def close_spider(self, spider):
@@ -29,8 +30,10 @@ class UserLikesPipeline:
 class MutualLikersPipeline:
 
     def open_spider(self, spider):
-        self.file = open('mutual_likers.csv', 'wb')
+        self.file = open('users.csv', 'ab')
         self.exporter = CsvItemExporter(self.file)
+        self.exporter.fields_to_export = ['username']
+
         self.exporter.start_exporting()
 
     def close_spider(self, spider):

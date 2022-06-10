@@ -1,3 +1,5 @@
+# gets all of the movies that the users scraped from film_likers.py liked
+
 import json
 import scrapy
 from scrapy.crawler import CrawlerProcess, CrawlerRunner, Crawler
@@ -5,48 +7,63 @@ from tboxd_scrapy_proj.spiders import user_likedfilms, film_getuserlikes
 import logging
 import csv
 import time
+from twisted.internet import reactor, defer
 logging.getLogger('scrapy').propagate = False
 
 start_time = time.time()
 print(start_time)
 
-with open('liked_films.csv', 'w', newline='') as filmcsv:
-    fieldnames=['film']
-    film_writer = csv.DictWriter(filmcsv, fieldnames=fieldnames)
-    film_writer.writeheader()
+'''process = CrawlerProcess()
 
-# opens user profile and gets their liked films and writes them to a csv
-get_user_liked_films = CrawlerProcess()
-get_user_liked_films.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug="philg2000")
-get_user_liked_films.start()
-get_user_liked_films._graceful_stop_reactor()
 
-# opens csv to to write usernames of other users
-with open('users.csv', 'w', newline='') as usercsv:
-    fieldnames=['username']
-    user_writer = csv.DictWriter(usercsv, fieldnames=fieldnames)
-    user_writer.writeheader()
+with open("users.csv") as myfile:
+    firstNlines=myfile.readlines()[3:6] #temporarily hardcoded, can't call too many
+    for line in firstNlines:
+        swag = line.strip()
+        print(swag)
+        process.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug=swag)
 
-get_films_liked_users = CrawlerProcess()
+process.start()'''
 
-# time.sleep(5)
 
-# test_list = ['enemy','parasite-2019','blade-runner-2049','the-master-2012']
-# for film in test_list:
-#     get_films_liked_users.crawl(film_getuserlikes.FilmGetUserLikesSpider, film_slug=film, main_user="philg2000")
+runner = CrawlerRunner()
 
-with open('liked_films.csv', newline='') as liked_films_file:
-    film_reader = csv.reader(liked_films_file, delimiter=' ', quotechar='|')
-    for row in film_reader:
-        print(row[0])
-        if row[0] != 'film':
-            get_films_liked_users.crawl(film_getuserlikes.FilmGetUserLikesSpider, film_slug=row[0], main_user="philg2000")
+@defer.inlineCallbacks
+def crawl():
+    yield runner.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug="philg2000")
 
-# get_films_liked_users.start()
+    with open("liked_films.csv") as myfile:
+        firstNlines=myfile.readlines()[3:6] #temporarily hardcoded, can't call too many
+        for line in firstNlines:
+            slug = line.strip().split(",")
+            yield runner.crawl(film_getuserlikes.FilmGetUserLikesSpider, film_slug=slug[1], main_user="philg2000")
 
-#get liked first 6400 liked users for each liked film
+    with open("users.csv") as myfile:
+        firstNlines=myfile.readlines()[3:6] #temporarily hardcoded, can't call too many
+        for line in firstNlines:
+            slug = line.strip()
+            yield runner.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug=slug)
 
-#go through each user and write their likes to a new csv
+    reactor.stop()
+
+foo = open('users.csv', "w+")
+foo.close()
+bar = open('liked_films.csv', 'w+')
+bar.close()
+
+crawl()
+reactor.run()
+
+#get liked first 6400 liked users for each liked film [done]
+
+#go through each user and write their likes to a new csv [done]
+
+
+#TODO:
+# - do all of the above but in 1 file/1 go
+# - load all of the csv data into a scipy sparse matrix 
+# - (optional?) move all of the data into a database 
+# - actually generate the recommendations
 #pass that csv to recco
 
 print("script finished: "+ str(time.time() - start_time)+" seconds")

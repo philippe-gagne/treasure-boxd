@@ -27,7 +27,6 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
         :type user_slug: string
         :param kw: keyword arguments to initialize Spider
         '''
-
         self.user_slug = user_slug
         self.start_urls = ['https://letterboxd.com/'+self.user_slug+'/likes/films/page/1/']
 
@@ -47,12 +46,13 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
                 page_num = like_num // 72
             else:
                 page_num = (like_num // 72)+1
-                    
+            
+
         film_slugs = response.css('div.poster.film-poster.really-lazy-load::attr(data-film-slug)').getall()
         
         item = UserLikesItem()
-        print(film_slugs)
         for i in range(len(film_slugs)):
+            item['username'] = self.user_slug
             item['film'] = film_slugs[i]
             yield item
 

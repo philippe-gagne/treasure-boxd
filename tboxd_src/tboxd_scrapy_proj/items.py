@@ -5,12 +5,11 @@
 
 import scrapy
 
-
 class UserLikesItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    username = scrapy.Field()
     film = scrapy.Field()
 
 class MutualLikersItem(scrapy.Item):
-    film = scrapy.Field()
+    # film = scrapy.Field()
     username = scrapy.Field()

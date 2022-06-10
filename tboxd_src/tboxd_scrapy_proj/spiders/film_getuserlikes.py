@@ -39,31 +39,11 @@ class FilmGetUserLikesSpider(scrapy.Spider):
         like_num = response.css('li.js-route-likes').xpath('a/@title').get()
         like_num = int(like_num.split('\xa0')[0].replace(',',''))
 
-        # for x in range(0, len(user_slugs)):
-        #     user_slugs[x] = user_slugs[x][1:-1]
-
-        # if self.main_user in user_slugs: user_slugs.remove(self.main_user)
-        # # self.all_users = self.all_users + user_slugs
-
         item = MutualLikersItem()
         for user in user_slugs:
-            item['film'] = self.film_slug
             item['username'] = user
             yield item
-
-        # if(like_num / 25 >= 256):
-        #     page_num = 256
-        # else:
-        #     page_num = (like_num / 25) + 1
 
         if response.css('a.previous').get() == None :
             for x in range(2, 257):
                 yield scrapy.Request(url='https://letterboxd.com/film/'+self.film_slug+'/likes/page/'+str(x)+'/')
-    
-    # def close(self, reason):
-    #     with open('users.csv', 'a', newline='') as outfile:
-    #         fieldnames=['username']
-    #         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-    #         for user in self.all_users:
-    #             writer.writerow({'username':user})
-
