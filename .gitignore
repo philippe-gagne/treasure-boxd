@@ -6,11 +6,11 @@ frontend/node_modules
 .pnp.js
 
 # caches
-tboxd_src/__pycache__
-tboxd_src/tboxd_scrapy_proj/__pycache__
+__pycache__/
 
 # testing
 /coverage
+tboxd_backend/*.csv
 
 # production
 /build
