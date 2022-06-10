@@ -5,6 +5,10 @@ frontend/node_modules
 /.pnp
 .pnp.js
 
+# caches
+tboxd_src/__pycache__
+tboxd_src/tboxd_scrapy_proj/__pycache__
+
 # testing
 /coverage
 
