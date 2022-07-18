@@ -11,7 +11,7 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
 
     name = 'user_likedfilms'
     allowed_domains = ['letterboxd.com']
-    start_urls = ['https://letterboxd.com/philg2000/likes/films/page/1/'] 
+    start_urls = ['https://letterboxd.com/philg2000/films/page/1/'] 
 
     custom_settings = {
         'ITEM_PIPELINES':{
@@ -28,7 +28,7 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
         :param kw: keyword arguments to initialize Spider
         '''
         self.user_slug = user_slug
-        self.start_urls = ['https://letterboxd.com/'+self.user_slug+'/likes/films/page/1/']
+        self.start_urls = ['https://letterboxd.com/'+self.user_slug+'/films/page/1/']
 
         super().__init__(**kwargs) 
 
@@ -38,30 +38,22 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
 
         @return: array of film slugs as strings
         '''
-        if response.css('a.previous').get() == None:
-            like_num = response.css('li.selected').xpath('a/@title').get()
-            like_num = int(like_num.split('\xa0')[0].replace(',',''))
+        # if response.css('a.previous').get() == None:
+            # like_num = response.css('li.selected').xpath('a/@title').get()
+            # like_num = int(like_num.split('\xa0')[0].replace(',',''))
 
-            if(like_num%72 == 0):
-                page_num = like_num // 72
-            else:
-                page_num = (like_num // 72)+1
-            
+        films = response.xpath("//div[@id='content']/div[@class='content-wrap']/div[@class='cols-2 overflow']/section[@class='section col-main overflow']/ul[@class='poster-list -p70 -grid film-list clear']/li")
 
-        film_slugs = response.css('div.poster.film-poster.really-lazy-load::attr(data-film-slug)').getall()
-        
         item = UserLikesItem()
-        for i in range(len(film_slugs)):
-            item['username'] = self.user_slug
-            item['film'] = film_slugs[i]
+        for film in films:
+            item['film'] = film.css('div::attr(data-film-slug)').get()
+            if film.xpath(".//span[@class='icon']").get() == None:
+                item['liked'] = 'false'
+            else:
+                item['liked'] = 'true'
             yield item
-            
-#         with open("liked_films.csv", "a", newline="") as outfile:
-#             fieldnames = ["user","film"]
-#             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-#             for film in film_slugs:
-#                 writer.writerow({'user' : self.user_slug,'film' : film})
 
-        # if response.css('a.previous').get() == None and page_num > 1 :
-        #     for x in range(2, (page_num+1)):
-        #         yield scrapy.Request(url='https://letterboxd.com/'+self.user_slug+'/likes/films/page/'+str(x)+'/')
+        next_url = response.xpath("//div[@id='content']/div[@class='content-wrap']/div[@class='cols-2 overflow']/section[@class='section col-main overflow']/div[@class='pagination']/div[@class='paginate-nextprev']/a[@class='next']").css('a::attr(href)').get()
+        
+        if next_url != None:
+            yield scrapy.Request(url='https://letterboxd.com/'+next_url)
