@@ -7,8 +7,6 @@ class FilmGetInfoSpider(scrapy.Spider):
     name = 'film_getnanogenres'
     allowed_domains = ['letterboxd.com']
     start_urls = ['https://letterboxd.com/film/enemy/']
-    user_num = None
-    all_users = []
     logging.getLogger('scrapy').propagate = False
 
     custom_settings = {
@@ -19,10 +17,12 @@ class FilmGetInfoSpider(scrapy.Spider):
 
     def __init__(self, film_slug='enemy', score=0, **kwargs):
         '''
-        Spider that crawls a film's page to collect every user that has "Liked" that film.
+        Spider that crawls a film's page and collects info about the film.
 
         :param film_slug: movie's internal name, as shown in the url of the page
         :type film_slug: string
+        :param score: movie's recommendation score
+        :type score: int
         :param kw: keyword arguments to initialize Spider
         ''' 
         # global all_users        
@@ -47,5 +47,5 @@ class FilmGetInfoSpider(scrapy.Spider):
         #genres
         #views
         #likes
-        
+
         yield item

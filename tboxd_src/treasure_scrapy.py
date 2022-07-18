@@ -3,7 +3,7 @@
 import json
 import scrapy
 from scrapy.crawler import CrawlerProcess, CrawlerRunner, Crawler
-from tboxd_scrapy_proj.spiders import user_likedfilms, film_getuserlikes, film_getnanogenres, film_getinfo
+from tboxd_scrapy_proj.spiders import user_likedfilms, film_getnanogenres, film_getinfo
 import logging
 import csv
 import time
@@ -13,28 +13,17 @@ logging.getLogger('scrapy').propagate = False
 start_time = time.time()
 print(start_time)
 
-'''process = CrawlerProcess()
-
-
-with open("users.csv") as myfile:
-    firstNlines=myfile.readlines()[3:6] #temporarily hardcoded, can't call too many
-    for line in firstNlines:
-        swag = line.strip()
-        print(swag)
-        process.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug=swag)
-
-process.start()'''
-
 runner = CrawlerRunner()  
 
 @defer.inlineCallbacks
 def crawl():
+
+    #get user's watched and liked films
     yield runner.crawl(user_likedfilms.UserGetLikedFilmsSpider, user_slug="philg2000")
 
-    # print("done getting user likes")
-
+    #goes through user's watched films and gets the nanogenres for liked films
     with open("liked_films.csv") as myfile:
-        firstNlines=myfile.readlines() #temporarily hardcoded, can't call too many
+        firstNlines=myfile.readlines()
         for line in firstNlines:
             data = line.strip().split(",")
             viewed_films.append(data[0])
@@ -42,6 +31,7 @@ def crawl():
                 # print(slug)
                 yield runner.crawl(film_getnanogenres.FilmGetNanogenresSpider, film_slug=data[0])
 
+    # count how much each nanogenre recurrs
     with open("nanogenres.csv") as myfile:
         firstNlines=myfile.readlines()[1:-1]
         top_themes = {}
@@ -52,6 +42,7 @@ def crawl():
             else:
                 top_themes[theme[0]] = 1
     
+    # count how much each movie recurrs across all nanogenres)
     with open("movies.csv") as myfile:
         firstNlines=myfile.readlines()[1:-1]
         top_movies = {}
@@ -110,11 +101,6 @@ viewed_films = []
 
 crawl()
 reactor.run()
-
-#get liked first 6400 liked users for each liked film [done]
-
-#go through each user and write their likes to a new csv [done]
-
 
 #TODO:
 # - do all of the above but in 1 file/1 go

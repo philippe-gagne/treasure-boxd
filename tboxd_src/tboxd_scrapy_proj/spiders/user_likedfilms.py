@@ -34,13 +34,10 @@ class UserGetLikedFilmsSpider(scrapy.Spider):
 
     def parse(self, response):
         '''
-        Scrapes all the films from the user profile and returns all the film slugs (ids)
+        Scrapes all the films from the user profile and returns all the film slugs in a csv
 
         @return: array of film slugs as strings
         '''
-        # if response.css('a.previous').get() == None:
-            # like_num = response.css('li.selected').xpath('a/@title').get()
-            # like_num = int(like_num.split('\xa0')[0].replace(',',''))
 
         films = response.xpath("//div[@id='content']/div[@class='content-wrap']/div[@class='cols-2 overflow']/section[@class='section col-main overflow']/ul[@class='poster-list -p70 -grid film-list clear']/li")
 

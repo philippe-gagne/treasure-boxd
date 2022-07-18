@@ -19,7 +19,7 @@ class FilmGetNanogenresSpider(scrapy.Spider):
 
     def __init__(self, film_slug='enemy', **kwargs):
         '''
-        Spider that crawls a film's page to collect every user that has "Liked" that film.
+        Spider that crawls a film's page to get all its nanogenres and the top 16 movies that belong to each nanogenre.
 
         :param film_slug: movie's internal name, as shown in the url of the page
         :type film_slug: string
@@ -48,7 +48,3 @@ class FilmGetNanogenresSpider(scrapy.Spider):
                 theme = i // 16
                 item['theme'] = theme_slugs[theme]
                 yield item
-
-        # if response.css('a.previous').get() == None :
-        #     for x in range(2, 257):
-        #         yield scrapy.Request(url='https://letterboxd.com/film/'+self.film_slug+'/likes/page/'+str(x)+'/')
